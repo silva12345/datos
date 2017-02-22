@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css">
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function (){
+			/*****evento para guardar servicios*****/
+			$("#btnGuardar").tap(function (){
+				//alert("Funciona click");
+				var nom=$("#Nombre").val();
+				var dir=$("#Direccion").val();
+				var rfc=$("#RFC").val();
+				var tel=$("#Telefono").val();
+				var clasif=$("#clasificacion").val();
+				var foto="img/fotos/foto1.jpg";
+				var lat=$("#latitud").val();
+				var longit=$("#longitud").val();
+				$.ajax({
+					type:"POST",
+					url:"http://www.cesarmovil.esy.es",
+					data:"Nom="+nom+"&Dir="+dir+"&Rfc="+rfc+"&Tel="+tel+"&Clasif="+clasif+"&Foto="+foto+"&Lat="+lat+"&Long="+longit,
+					success:function respuesta(datos) {
+						alert(datos);
+					}
+				});
+			});
+
+			$("#btnConsServ").tap(function (){
+				//alert("Funciona");
+				$.ajax({
+					type:"POST",
+					url:"http://www.cesarmovil.esy.es",
+					data:"",
+					success:function CosultaTodo(datos){
+						var reg=$.parseJSON(datos);
+						//alert(datos);
+						var contenido=$("#datosTodos");
+						contenido.html("<table border='1' id='tb1'><th>Id</th><th>Nombre</th><th>Direccion</th><th>RFC</th><th>Tel:</th><th>Clasif</th><th>Foto</th><th>Lat</th><th>Long</th>");
+						var fila=$("#tb1");
+						for(var i in reg){
+							fila.append("<tr><td>"+reg[i].Id_Servicio+"</td><td>"+reg[i].Nombre_servicio+"</td><td>"+reg[i].Direcccion+"</td><td>"+reg[i].RFC+"</td><td>"+reg[i].Telefono+"</td><td>"+reg[i].Clasificacion+"</td><td>"+reg[i].Foto+"</td><td>"+reg[i].Latitud+"</td><td>"+reg[i].Longitud+"</td></tr>");
+
+						}
+						fila.append("</table>");
+					}
+				});
+			});
+
+		});
+	</script>
+	<style type="text/css">
+		p{
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div data-role="page" id="Principal">
+		<div data-role="header">
+			<p>Menú principal</p>
+		</div>	
+		<div data-role="content">
+			<ul data-role="listview">
+				<li><a href="#Registrar">Registrar servicios</a></li>	
+				<li><a href="#Consultar">Consultar servicios</a></li>
+				<li><a href="#Actualizar">Actualizar servicios</a></li>
+				<li><a href="#Eliminar">Eliminar servicios</a></li>
+			</ul>	
+		</div>
+		<div data-role="footer">
+			<p>pie de aplicación</p>
+		</div>
+	</div>
+
+	<div data-role="page" id="Registrar">
+		<div data-role="header">
+			<p>Registrar servicios</p>
+		</div>	
+		<div data-role="content">
+			<input type="text" id="Nombre" placeholder="Escribe el nombres del servicio">
+			<input type="text" id="Direccion" placeholder="Escribe la dirección">
+			<input type="text" id="RFC" placeholder="Escribe el RFC">
+			<input type="text" id="Telefono" placeholder="Escribe el número de teléfono">
+			<select id="clasificacion">
+				<option value="Restaurante">Restaurante</option>
+				<option value="Zapateria">Zapatería</option>
+				<option value="Farmacia">Farmacia</option>
+			</select>
+			<input type="button" id="btnFoto" value="Tomar foto">
+			<input type="button" id="btnCords" value="Obtener coordenadas">
+			<input type="text" id="latitud" placeholder="Latitud">
+			<input type="text" id="longitud" placeholder="Longitud">
+			<input type="button" id="btnGuardar" value="Guardar servicio">
+		</div>
+		<div data-role="footer">
+			<p><a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Regresar</a></p>
+		</div>
+	</div>
+	
+	
+<div data-role="page" id="Consultar">
+		<div data-role="header">
+			<p>Consultar Servicios</p>
+		</div>	
+		<div data-role="content">
+		<input type="button" id="btnConsServ" value="Consultar Todos los Servicios">
+		<div id="datosTodos">
+
+		</div>
+			
+
+		</div>
+		<div data-role="footer">
+			<p><a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Regresar</a></p>
+		</div>
+	</div>
+
+			
+</body>
+</html>
